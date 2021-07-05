@@ -24,7 +24,7 @@ services:
       - ACCESS_TOKEN_EXPIRE_MINUTES=1440 # 管理系统账号cookie过期时间 单位分钟
       - SPIDER_IMAGE=boris0621/feapder:1.0 # 爬虫镜像
       - AUTO_PULL_IMAGE=1 # 是否自动拉取镜像 否则需要在爬虫节点手动 docker pull 爬虫镜像，为了加快启动速度，可以设置0
-      - FEAPDER_BACKEND_URL=http://ip:8000 # **必填  服务端地址；端口需与自定义端口对上
+      - FEAPDER_BACKEND_URL=http://ip:8000 # **必填  服务端内网地址 ；端口需与自定义端口对上
       - AUTHORIZATION_CODE= # **必填  授权码
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
