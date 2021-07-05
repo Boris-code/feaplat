@@ -16,7 +16,7 @@ services:
     container_name: feapder_backend
     image: boris0621/feapder_backend:1.0
     restart: always
-    command: uvicorn main:app --host 0.0.0.0 --workers 10 --port 8000
+    command: uvicorn main:app --host 0.0.0.0 --workers 1 --port 8000 # workers 为后端服务的个数，爬虫多可改大点
     ports:
       - 8000:8000 # 后端端口 （自定义端口:8000）
     environment:
