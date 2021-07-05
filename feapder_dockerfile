@@ -1,0 +1,3 @@
+FROM boris0621/feapder_front:1.0
+
+# 自己随便搞事情，搞完修改下 feapder_dockerfile 里 SPIDER_IMAGE 的值即可
