@@ -3,7 +3,7 @@ version: "3"
 services:
   feapder_front:
     container_name: feapder_front
-    image: boris0621/feapder_front:1.0
+    image: boris0621/feapder_front:1.1
     restart: always
     environment:
       - BACKEND_URL=http://feapder_backend:8000
@@ -14,7 +14,7 @@ services:
 
   feapder_backend:
     container_name: feapder_backend
-    image: boris0621/feapder_backend:1.0
+    image: boris0621/feapder_backend:1.1
     restart: always
     command: uvicorn main:app --host 0.0.0.0 --workers 1 --port 8000 # workers 为后端服务的个数，爬虫多可改大点
     ports:

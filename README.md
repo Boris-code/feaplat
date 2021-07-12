@@ -7,7 +7,7 @@
 1. **爬虫管理系统不仅支持 `feapder`、`scrapy`，且支持执行任何脚本，可以把该系统理解成脚本托管的平台** 。因为爬虫往往需要其他脚本辅助，如生产cookie脚本、搭建nodejs服务破解js，甚至是其他语言的脚本，本管理系统在设计之初就考虑到了这一点，因此可完美支持。
 
 2. **支持集群**，工作节点根据配置定时启动，**执行完释放，不常驻**，节省服务器资源。一个爬虫实例一个节点，**彼此之间隔离**，互不影响。
-
+3. 支持**管理员**和**普通用户**两种角色，管理员可看到全部项目，普通用户只可看到自己创建的项目。
 
 ## 功能概览
 
@@ -36,6 +36,14 @@
 
 日志
 ![-w1742](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254983085371.jpg)
+
+
+### 4. 用户管理
+
+用户分为**管理员**和**普通用户**两种角色，管理员可看到全部项目，普通用户只可看到自己创建的项目，且只有管理员可看到用户管理面板
+
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/12/16260660857747.jpg)
+
 
 ## 部署
 
@@ -82,16 +90,18 @@ To add a worker to this swarm, run the following command:
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 ```
 
+### 3. 添加节点
+
 添加其他服务器为节点时使用上面提示的 `docker swarm join --token [token] [ip]`命令 
 
-### 3. 安装docker-compose
+### 4. 安装docker-compose
 
 ```python
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-### 4. 部署管理系统
+### 5. 部署管理系统
 
 #### 1. 下载项目
 
@@ -140,6 +150,7 @@ docker-compose up -d
 #### 5. 访问爬虫管理系统
 
 默认地址：`http://localhost`
+默认账密：admin / admin
 
 端口修改在`docker-compose.yaml`
 
