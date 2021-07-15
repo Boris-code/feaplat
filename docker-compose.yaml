@@ -14,7 +14,7 @@ services:
 
   feapder_backend:
     container_name: feapder_backend
-    image: boris0621/feapder_backend:1.2
+    image: boris0621/feapder_backend:1.3
     restart: always
     command: uvicorn main:app --host 0.0.0.0 --workers 1 --port 8000 # workers 为后端服务的个数，爬虫多可改大点
     ports:
@@ -27,7 +27,12 @@ services:
       - SPIDER_IMAGE=boris0621/feapder:1.1 # 爬虫镜像
       - SPIDER_AUTO_PULL_IMAGE=1 # 是否自动拉取镜像 否则需要在爬虫节点手动 docker pull 爬虫镜像，为了加快启动速度，可以设置0
       - SPIDER_ENV={} # 爬虫环境变量 值为json类型
-      - SPIDER_RUN_ARGS={"--network":"host","--limit-cpu":1,"--limit-memory":"1G"} # 爬虫容器启动参数，支持的参数使用 docker service create --help 查看
+      # 爬虫容器启动参数，支持的参数使用 docker service create --help 查看
+      - SPIDER_RUN_ARGS={
+        "--network":"host",
+        "--limit-cpu":1,
+        "--limit-memory":"1G"
+        }
       # git ssh 私有密钥，不填则使用默认的
       - GIT_SSH_PRIVATE_KEY=
     volumes:
