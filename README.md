@@ -124,14 +124,16 @@ docker-compose up
 
 ```shell
 cd feapder-platform
-vim docker-compose.yaml
+vim .env
 ```
 
 配置里有注释，注意必须修改下面两项
 
 ```shell
-- FEAPDER_BACKEND_URL=http://ip:8000 # **必填 服务端内网地址
-- AUTHORIZATION_CODE= # **必填  授权码
+# 服务端部署的服务器所在的内网IP，用于爬虫节点通讯
+BACKEND_IP=
+# 授权码
+AUTHORIZATION_CODE=
 ```
 
 查看内网地址：
@@ -140,6 +142,8 @@ vim docker-compose.yaml
 ifconfig
 ```
 ![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16255025919847.jpg)
+
+`.env` 文件将常用的配置项列了出来，`docker-compose.yaml`引用。若需要更进一步的自定义配置，可修改`docker-compose.yaml`
 
 
 #### 4. 后台运行
@@ -152,7 +156,7 @@ docker-compose up -d
 默认地址：`http://localhost`
 默认账密：admin / admin
 
-端口修改在`docker-compose.yaml`
+端口修改在`.env`文件
 
 #### 6. 停止
 
@@ -184,7 +188,7 @@ COPY .ssh /root/.ssh
 
 欢迎提PR，大家一起构建一个🐂的镜像
 
-## 价格 109元
+## 价格 119元
 
 先部署运行，然后根据终端打印的日志 提供机器码和公网IP，联系作者微信购买授权码
 
@@ -194,3 +198,20 @@ COPY .ssh /root/.ssh
 
 本人承诺不上传任何数据，切勿相信其他渠道的破解版，天上掉馅饼不一定是好事。
 
+## 学习交流
+
+<table border="0"> 
+    <tr> 
+     <td> 知识星球：17321694 </td> 
+     <td> 作者微信： boris_tm </td> 
+     <td> QQ群号：750614606 </td> 
+    </tr> 
+    <tr> 
+    <td> <img src="http://markdown-media.oss-cn-beijing.aliyuncs.com/2020/02/16/zhi-shi-xing-qiu.jpeg" width=250px>
+ </td> 
+     <td> <img src="http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/12/er-wei-ma.jpeg?x-oss-process=style/markdown-media" width="250px" /> </td> 
+     <td> <img src="http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/12/16260897330897.jpg" width="250px" /> </td> 
+    </tr> 
+  </table> 
+  
+  加好友备注：feapder
