@@ -7,6 +7,7 @@ services:
     restart: always
     environment:
       - BACKEND_URL=http://feapder_backend:${BACKEND_PORT}
+      - FRONT_PORT=${FRONT_PORT}
     ports:
       - ${FRONT_PORT}:${FRONT_PORT} # 前端端口 （自定义端口:80）
     depends_on:
