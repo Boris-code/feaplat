@@ -1,3 +1,7 @@
-FROM boris0621/feapder:1.0
+FROM registry.cn-hangzhou.aliyuncs.com/feapderd/feapder:[最新版本号]
 
-# 自己随便搞事情，搞完修改下 docker-compose.yaml 里 SPIDER_IMAGE 的值即可
+# 例如安装依赖
+RUN pip3 install feapder \
+    && pip3 install scrapy
+
+# 自己随便搞事情，搞完修改下 `.env`文件里的 SPIDER_IMAGE 的值即可

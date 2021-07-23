@@ -172,21 +172,26 @@ docker-compose stop
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd/k/tjbcMislEunjtYQNXxz5tgEDc/fSvuLHBNUX4PtfmMQ07TuUX2XJIIzLRPaqv3nsMn3+QZrV0xQd545FG1Cq83JJB98ATTW7k5Q0eaWXkvThdFeG5+n85KeVV2W4BpdHHNZ5h9RxBUmVZPpAZacdC6OUSBYTyCblPfX9DvjOk+KfwAZVwpJSkv4YduwoR3DNfXrmK5P+wrYW9z/VHUf0hcfWEnsrrHktCKgohZn9Fe8uS3B5wTNd9GgVrLGRk85ag+CChoqg80DjgFt/IhzMCArqwLyMn7rGG4Iu2Ie0TcdMc0TlRxoBhqrfKkN83cfQ3gDf41tZwp67uM9ZN feapder@qq.com
 ```
 
+或在`.env`文件里配置您的SSH私钥，然后在git仓库里添加您的公钥。
+
 ## 自定义爬虫节点
 
-默认的爬虫节点只打包了`feapder`、`scrapy`框架，若需要其它环境，可基于`boris0621/feapder:1.0`镜像自行构建
+默认的爬虫节点只打包了`feapder`、`scrapy`框架，若需要其它环境，可基于`.env`文件里的`SPIDER_IMAGE`镜像自行构建
 
-如替换git仓库的公钥私钥
+如将常用的python库打包到镜像
 ```
-FROM boris0621/feapder:1.0
+FROM registry.cn-hangzhou.aliyuncs.com/feapderd/feapder:[最新版本号]
 
-COPY .ssh /root/.ssh
+# 安装依赖
+RUN pip3 install feapder \
+    && pip3 install scrapy
 
 ```
 
-自己随便搞事情，搞完修改下 docker-compose.yaml 里 SPIDER_IMAGE 的值即可
+自己随便搞事情，搞完修改下 `.env`文件里的 SPIDER_IMAGE 的值即可
 
 欢迎提PR，大家一起构建一个🐂的镜像
+
 
 ## 价格 119元
 
