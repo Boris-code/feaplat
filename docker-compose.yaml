@@ -37,12 +37,20 @@ services:
         }
       # git ssh 私有密钥，不填则使用默认的
       - GIT_SSH_PRIVATE_KEY=${GIT_SSH_PRIVATE_KEY}
+      # 监控配置
+      - INFLUXDB_HOST=${BACKEND_IP}
+      - INFLUXDB_DB=${INFLUXDB_DB}
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+      - INFLUXDB_PORT_TCP=${INFLUXDB_PORT_TCP}
+      - INFLUXDB_PORT_UDP=${INFLUXDB_PORT_UDP}
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "~/data/feapder/projects:/projects" # 上传的项目挂载， 本地目录:容器路径
     depends_on:
       - mysql
       - redis
+      - influxdb
 
   mysql:
     container_name: feapder_backend_mysql
@@ -68,3 +76,36 @@ services:
       - ${REDIS_PORT}:6379
     volumes:
       - "~/data/feapder/feapder_backend_redis:/data" # redis 挂载， 本地目录:容器路径
+
+  # 监控
+  grafana:
+    user: root
+    restart: always
+    image: grafana/grafana
+    container_name: feapder_grafana
+    volumes:
+      - ~/data/feapder/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - ${GRAFANA_PORT}:3000
+    depends_on:
+      - influxdb
+
+  influxdb:
+    restart: always
+    image: influxdb:1.8.6
+    container_name: feapder_influxdb
+    volumes:
+      - ~/data/feapder/influxdb:/var/lib/influxdb
+      - ./conf/influxdb.conf:/etc/influxdb/influxdb.conf
+    environment:
+      - INFLUXDB_DB=${INFLUXDB_DB}
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+      - INFLUXDB_USER=influx
+      - INFLUXDB_USER_PASSWORD=influx
+    ports:
+      - ${INFLUXDB_PORT_TCP}:8086
+      - ${INFLUXDB_PORT_UDP}:8089/udp
