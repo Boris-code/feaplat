@@ -1,8 +1,8 @@
-# 爬虫管理系统|FEAPDER
+# 爬虫管理系统 - FEAPLAT
 
 > 生而为虫，不止于虫
 
-## 为什么用feapder爬虫管理系统
+## 为什么用feaplat爬虫管理系统
 
 **市面上的爬虫管理系统**
 
@@ -10,7 +10,7 @@
 
 需要先部署好master、worker节点，worker节点常驻，等待master的指令执行任务。一个worker节点里可能同时跑了多个爬虫，一旦一个爬虫内存泄露等原因，可能会引发worker节点崩溃，影响该节点里的全部任务。并且worker数量不能弹性伸缩，无法利用云原生的优势
 
-**feapder爬虫管理系统**
+**feaplat爬虫管理系统**
 
 ![pic](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/23/pic.gif)
 
