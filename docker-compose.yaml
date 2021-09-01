@@ -31,9 +31,8 @@ services:
       - SPIDER_ENV={} # 爬虫环境变量 值为json类型
       # 爬虫容器启动参数，支持的参数使用 docker service create --help 查看
       - SPIDER_RUN_ARGS={
-        "--network":"host",
-        "--limit-cpu":1,
-        "--limit-memory":"1G"
+#        "--limit-cpu":2,
+#        "--limit-memory":"2G"
         }
       # git ssh 私有密钥，不填则使用默认的
       - GIT_SSH_PRIVATE_KEY=${GIT_SSH_PRIVATE_KEY}
