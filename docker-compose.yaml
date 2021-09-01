@@ -24,7 +24,7 @@ services:
       - FEAPDER_BACKEND_URL=http://${BACKEND_IP}:${BACKEND_PORT} # **必填  服务端内网地址 ；端口需与自定义端口对上
       - AUTHORIZATION_CODE=${AUTHORIZATION_CODE} # **必填  授权码
       - DB_URL=mysql+pymysql://root:root123@mysql:3306/feapder_platform?charset=utf8mb4 # 后端数据库配置
-      - REDIS_DB_URL=redis://@redis:6379/0 # redis数据库连接配置 redis://[[username]:[password]]@[host]:[port]/[db]
+      - REDIS_DB_URL=redis://:feapderYYDS@redis:6379/0 # redis数据库连接配置 redis://[[username]:[password]]@[host]:[port]/[db]
       - ACCESS_TOKEN_EXPIRE_MINUTES=1440 # 管理系统账号cookie过期时间 单位分钟
       - SPIDER_IMAGE=${SPIDER_IMAGE} # 爬虫镜像
       - SPIDER_AUTO_PULL_IMAGE=1 # 是否自动拉取镜像 否则需要在爬虫节点手动 docker pull 爬虫镜像，为了加快启动速度，可以设置0
@@ -69,11 +69,11 @@ services:
 
   redis:
     container_name: feapder_backend_redis
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --requirepass feapderYYDS
     restart: always
     image: registry.cn-hangzhou.aliyuncs.com/feapderd/redis:6.0.10
-    ports:
-      - ${REDIS_PORT}:6379
+#    ports:
+#      - ${REDIS_PORT}:6379
     volumes:
       - "~/data/feapder/feapder_backend_redis:/data" # redis 挂载， 本地目录:容器路径
 
