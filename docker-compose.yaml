@@ -30,14 +30,11 @@ services:
       - SPIDER_AUTO_PULL_IMAGE=1 # 是否自动拉取镜像 否则需要在爬虫节点手动 docker pull 爬虫镜像，为了加快启动速度，可以设置0
       - SPIDER_ENV={} # 爬虫环境变量 值为json类型
       # 爬虫容器启动参数，支持的参数使用 docker service create --help 查看
-      - SPIDER_RUN_ARGS={
-#        "--limit-cpu":2,
-#        "--limit-memory":"2G"
-        }
+      - SPIDER_RUN_ARGS={}
       # git ssh 私有密钥，不填则使用默认的
       - GIT_SSH_PRIVATE_KEY=${GIT_SSH_PRIVATE_KEY}
       # 监控配置
-      - INFLUXDB_HOST=${BACKEND_IP}
+      - INFLUXDB_HOST=${INFLUXDB_HOST}
       - INFLUXDB_DB=${INFLUXDB_DB}
       - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
       - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
