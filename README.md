@@ -2,6 +2,10 @@
 
 > 生而为虫，不止于虫
 
+**feaplat**命名源于 feapder 与 platform 的缩写
+
+读音： `[ˈfiːplæt] `
+
 ## 为什么用feaplat爬虫管理系统
 
 **市面上的爬虫管理系统**
@@ -24,9 +28,11 @@
 
 1. 爬虫管理系统不仅支持 `feapder`、`scrapy`，且**支持执行任何脚本**，可以把该系统理解成脚本托管的平台 。
 
-2. **支持集群**
-3. 工作节点根据配置定时启动，执行完释放，不常驻，节省服务器资源。**一个爬虫实例一个节点，彼此之间隔离**，互不影响。
-4. 支持**管理员**和**普通用户**两种角色，管理员可看到全部项目，普通用户只可看到自己创建的项目。
+2. 支持集群
+3. 工作节点根据配置定时启动，执行完释放，不常驻
+4. 一个worker内只运行一个爬虫，worker彼此之间隔离，互不影响。
+5. 支持**管理员**和**普通用户**两种角色
+6. 可自定义爬虫端镜像
 
 
 ## 功能概览
@@ -63,6 +69,18 @@
 用户分为**管理员**和**普通用户**两种角色，管理员可看到全部项目，普通用户只可看到自己创建的项目，且只有管理员可看到用户管理面板
 
 ![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/12/16260660857747.jpg)
+
+
+### 5. 爬虫监控
+
+feaplat支持对feapder爬虫的运行情况进行监控，除了数据监控和请求监控外，用户还可自定义监控内容，详情参考[自定义监控](source_code/监控打点?id=自定义监控)
+
+若scrapy爬虫或其他python脚本使用监控功能，也可通过自定义监控的功能来支持，详情参考[自定义监控](source_code/监控打点?id=自定义监控)
+
+注：需 feapder>=1.6.6
+
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/09/14/16316112326191.jpg)
+
 
 
 ## 部署
@@ -115,29 +133,7 @@ gitee
 git clone https://gitee.com/Boris-code/feaplat.git
 ```
 
-#### 2. 修改配置
-
-```shell
-cd feaplat
-vim .env
-```
-配置里有注释，注意必须配置 BACKEND_IP
-
-```shell
-# 服务端部署的服务器所在的内网IP，用于爬虫节点通讯
-BACKEND_IP=
-```
-
-查看内网地址（可选）：
-
-```shell
-ifconfig
-```
-![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16255025919847.jpg)
-
-`.env` 文件将常用的配置项列了出来，`docker-compose.yaml`引用。若需要更进一步的自定义配置，可修改`docker-compose.yaml`
-
-#### 3. 运行 
+#### 2. 运行 
 
 首次运行需拉取镜像，时间比较久，且运行可能会报错，再次运行下就好了
 
@@ -146,14 +142,21 @@ cd feaplat
 docker-compose up -d
 ```
 
-若端口冲突，可修改.env文件
+- 若端口冲突，可修改.env文件，参考[常见问题](https://boris.org.cn/feapder/#/feapder_platform/question?id=修改端口)
 
-#### 4. 访问爬虫管理系统
+- 首次运行时，检查下后端日志，看是否运行成功，若报mysql连接错误，重启一次即可解决。这是因为第一次初始化环境，可能后端先于mysql运行了。
+    - 查看后端日志命令：`docker logs -f feapder_backend`
+    - 重启命令：`docker-compose restart`
+
+#### 3. 访问爬虫管理系统
 
 默认地址：`http://localhost`
 默认账密：admin / admin
 
-#### 5. 停止（可选）
+- 若未成功，参考[常见问题](https://boris.org.cn/feapder/#/feapder_platform/question)
+- 使用说明，参考[使用说明](https://boris.org.cn/feapder/#/feapder_platform/usage)
+
+#### 4. 停止（可选）
 
 ```shell
 docker-compose stop
