@@ -17,7 +17,7 @@ services:
     container_name: feapder_backend
     image: ${BACKEND_IMAGE}
     restart: always
-    command: uvicorn main:app --host 0.0.0.0 --workers ${BACKEND_WORKER} --port ${BACKEND_PORT} # workers 为后端服务的个数，爬虫多可改大点
+    command: /wait-for-it.sh mysql:3306 -t 60 --strict -- uvicorn main:app --host 0.0.0.0 --workers ${BACKEND_WORKER} --port ${BACKEND_PORT} # workers 为后端服务的个数，爬虫多可改大点
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT} # 后端端口 （自定义端口:8000）
     environment:
@@ -47,6 +47,9 @@ services:
       - mysql
       - redis
       - influxdb
+
+  feapder:
+    image: ${SPIDER_IMAGE}
 
   mysql:
     container_name: feapder_backend_mysql
