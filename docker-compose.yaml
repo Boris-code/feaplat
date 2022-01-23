@@ -49,6 +49,7 @@ services:
       - influxdb
 
   feapder:
+    container_name: feapder_worker
     image: ${SPIDER_IMAGE}
 
   mysql:
@@ -76,21 +77,21 @@ services:
     volumes:
       - "~/data/feapder/feapder_backend_redis:/data" # redis 挂载， 本地目录:容器路径
 
-  # 监控
-  grafana:
-    user: root
-    restart: always
-    image: grafana/grafana
-    container_name: feapder_grafana
-    volumes:
-      - ~/data/feapder/grafana:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    ports:
-      - ${GRAFANA_PORT}:3000
-    depends_on:
-      - influxdb
+#  # 监控
+#  grafana:
+#    user: root
+#    restart: always
+#    image: grafana/grafana
+#    container_name: feapder_grafana
+#    volumes:
+#      - ~/data/feapder/grafana:/var/lib/grafana
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+#    ports:
+#      - ${GRAFANA_PORT}:3000
+#    depends_on:
+#      - influxdb
 
   influxdb:
     restart: always
