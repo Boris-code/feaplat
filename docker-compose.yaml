@@ -21,8 +21,8 @@ services:
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT} # 后端端口 （自定义端口:8000）
     environment:
-      - FEAPDER_BACKEND_URL=http://${BACKEND_IP}:${BACKEND_PORT} # **必填  服务端内网地址 ；端口需与自定义端口对上
-      - AUTHORIZATION_CODE=${AUTHORIZATION_CODE} # **必填  授权码
+      - FEAPDER_BACKEND_URL=http://feapder_backend:${BACKEND_PORT}
+      - AUTHORIZATION_CODE=${AUTHORIZATION_CODE} # 授权码
       - DB_URL=mysql+pymysql://root:root123@mysql:3306/feapder_platform?charset=utf8mb4 # 后端数据库配置
       - REDIS_DB_URL=redis://:feapderYYDS@redis:6379/0 # redis数据库连接配置 redis://[[username]:[password]]@[host]:[port]/[db]
       - ACCESS_TOKEN_EXPIRE_MINUTES=1440 # 管理系统账号cookie过期时间 单位分钟
@@ -30,16 +30,16 @@ services:
       - SPIDER_AUTO_PULL_IMAGE=1 # 是否自动拉取镜像 否则需要在爬虫节点手动 docker pull 爬虫镜像，为了加快启动速度，可以设置0
       - SPIDER_ENV={} # 爬虫环境变量 值为json类型
       # 爬虫容器启动参数，支持的参数使用 docker service create --help 查看
-      - SPIDER_RUN_ARGS={}
+      - SPIDER_RUN_ARGS={"--network":"feaplat"}
       # git ssh 私有密钥，不填则使用默认的
       - GIT_SSH_PRIVATE_KEY=${GIT_SSH_PRIVATE_KEY}
       # 监控配置
-      - INFLUXDB_HOST=${INFLUXDB_HOST}
+      - INFLUXDB_HOST=feapder_influxdb
       - INFLUXDB_DB=${INFLUXDB_DB}
       - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
       - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
-      - INFLUXDB_PORT_TCP=${INFLUXDB_PORT_TCP}
-      - INFLUXDB_PORT_UDP=${INFLUXDB_PORT_UDP}
+      - INFLUXDB_PORT_TCP=8086
+      - INFLUXDB_PORT_UDP=8089
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "~/data/feapder/projects:/projects" # 上传的项目挂载， 本地目录:容器路径
@@ -109,3 +109,8 @@ services:
     ports:
       - ${INFLUXDB_PORT_TCP}:8086
       - ${INFLUXDB_PORT_UDP}:8089/udp
+
+networks:
+  default:
+    name: feaplat
+    driver: overlay
