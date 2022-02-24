@@ -114,3 +114,4 @@ networks:
   default:
     name: feaplat
     driver: overlay
+    attachable: true
