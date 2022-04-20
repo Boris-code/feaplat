@@ -6,76 +6,60 @@
 
 读音： `[ˈfiːplæt] `
 
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/09/14/16316112326191.jpg)
+
+## 特性
+
+1. 支持任何python脚本，包括不限于`feapder`、`scrapy`
+2. 支持浏览器渲染，支持有头模式。浏览器支持`playwright`、`selenium`
+3. 支持部署服务，可自动负载均衡
+4. 支持服务器集群管理
+5. 支持监控，监控内容可自定义
+6. 支持起多个实例，如分布式爬虫场景
+7. 支持弹性伸缩
+8. 支持4种定时启动方式
+9. 支持自定义worker镜像，如自定义java的运行环境、机器学习环境等，即根据自己的需求自定义（feaplat分为`master-调度端`和`worker-运行任务端`）
+10. docker一键部署，架设在docker swarm集群上
+
+
 ## 为什么用feaplat爬虫管理系统
 
 **市面上的爬虫管理系统**
 
 ![feapderd](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/23/feapderd.png)
 
-需要先部署好master、worker节点，worker节点常驻，等待master的指令执行任务。一个worker节点里可能同时跑了多个爬虫，一旦一个爬虫内存泄露等原因，可能会引发worker节点崩溃，影响该节点里的全部任务。并且worker数量不能弹性伸缩，无法利用云原生的优势
+worker节点常驻，且运行多个任务，不能弹性伸缩，任务之前会相互影响，稳定性得不到保障
 
 **feaplat爬虫管理系统**
 
 ![pic](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/23/pic.gif)
 
-根据配置的爬虫数动态生成worker，爬虫启动时才创建，爬虫结束时销毁。一个worker内只跑一个爬虫，各个爬虫或任务之间互不影响，稳定性强。系统架设在`docker swarm`集群上，一台服务器宕机，worker会自动迁移到其他服务器节点。
-
-![-w1736](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/23/16270242301134.jpg)
-
-
-
-## 特性
-
-1. 爬虫管理系统不仅支持 `feapder`、`scrapy`，且**支持执行任何脚本**，可以把该系统理解成脚本托管的平台 。
-
-2. 支持集群
-3. 工作节点根据配置定时启动，执行完释放，不常驻
-4. 一个worker内只运行一个爬虫，worker彼此之间隔离，互不影响。
-5. 支持**管理员**和**普通用户**两种角色
-6. 可自定义爬虫端镜像
+worker节点根据任务动态生成，一个worker只运行一个任务实例，任务做完worker销毁，稳定性高；多个服务器间自动均衡分配，弹性伸缩
 
 
 ## 功能概览
 
-[点我观看视频](http://markdown-media.oss-cn-beijing.aliyuncs.com/爬虫管理平台完整版.mp4)
-
 ### 1. 项目管理
-
-项目列表
-![-w1786](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254967791920.jpg)
 
 添加/编辑项目
 ![-w1785](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254968151490.jpg)
 
 ### 2. 任务管理
 
-任务列表
-![-w1791](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254968630425.jpg)
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2022/03/03/16463109796998.jpg)
 
-定时支持 crontab、时间间隔、指定日期、只运行一次 四种方式。只运行一次的定时方式会在创建任务后立即运行
-![-w1731](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254968513292.jpg)
 
 ### 3. 任务实例
 
-列表
-![-w1785](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254981090479.jpg)
-
 日志
-![-w1742](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/06/16254983085371.jpg)
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2022/03/03/16463117042527.jpg)
 
 
-### 4. 用户管理
+### 4. 爬虫监控
 
-用户分为**管理员**和**普通用户**两种角色，管理员可看到全部项目，普通用户只可看到自己创建的项目，且只有管理员可看到用户管理面板
+feaplat支持对feapder爬虫的运行情况进行监控，除了数据监控和请求监控外，用户还可自定义监控内容，详情参考[自定义监控](http://feapder.com/#/source_code/%E7%9B%91%E6%8E%A7%E6%89%93%E7%82%B9?id=%e8%87%aa%e5%ae%9a%e4%b9%89%e7%9b%91%e6%8e%a7)
 
-![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/07/12/16260660857747.jpg)
-
-
-### 5. 爬虫监控
-
-feaplat支持对feapder爬虫的运行情况进行监控，除了数据监控和请求监控外，用户还可自定义监控内容，详情参考[自定义监控](source_code/监控打点?id=自定义监控)
-
-若scrapy爬虫或其他python脚本使用监控功能，也可通过自定义监控的功能来支持，详情参考[自定义监控](source_code/监控打点?id=自定义监控)
+若scrapy爬虫或其他python脚本使用监控功能，也可通过自定义监控的功能来支持，详情参考[自定义监控](http://feapder.com/#/source_code/%E7%9B%91%E6%8E%A7%E6%89%93%E7%82%B9?id=%e8%87%aa%e5%ae%9a%e4%b9%89%e7%9b%91%e6%8e%a7)
 
 注：需 feapder>=1.6.6
 
@@ -99,7 +83,10 @@ yum remove docker  docker-common docker-selinux docker-engine
 ```shell
 yum install -y yum-utils device-mapper-persistent-data lvm2 && python2 /usr/bin/yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && yum install docker-ce -y
 ```
-
+国内用户推荐使用
+```shell
+yum install -y yum-utils device-mapper-persistent-data lvm2 && python2 /usr/bin/yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum install docker-ce -y
+```
 启动
 ```shell
 systemctl enable docker
@@ -119,9 +106,18 @@ systemctl start docker
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
+国内用户推荐使用
+```shell
+sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
 
 ### 4. 部署feaplat爬虫管理系统
-
+#### 预备项
+安装git(1.8.3的版本已够用)
+```shell
+yum -y install git
+```
 #### 1. 下载项目
 
 gitub
@@ -142,19 +138,15 @@ cd feaplat
 docker-compose up -d
 ```
 
-- 若端口冲突，可修改.env文件，参考[常见问题](https://boris.org.cn/feapder/#/feapder_platform/question?id=修改端口)
-
-- 首次运行时，检查下后端日志，看是否运行成功，若报mysql连接错误，重启一次即可解决。这是因为第一次初始化环境，可能后端先于mysql运行了。
-    - 查看后端日志命令：`docker logs -f feapder_backend`
-    - 重启命令：`docker-compose restart`
+- 若端口冲突，可修改.env文件，参考[常见问题](http://feapder.com/#/feapder_platform/question?id=%e4%bf%ae%e6%94%b9%e7%ab%af%e5%8f%a3)
 
 #### 3. 访问爬虫管理系统
 
 默认地址：`http://localhost`
 默认账密：admin / admin
 
-- 若未成功，参考[常见问题](https://boris.org.cn/feapder/#/feapder_platform/question)
-- 使用说明，参考[使用说明](https://boris.org.cn/feapder/#/feapder_platform/usage)
+- 若未成功，参考[常见问题](http://feapder.com/#/feapder_platform/question)
+- 使用说明，参考[使用说明](http://feapder.com/#/feapder_platform/usage)
 
 #### 4. 停止（可选）
 
@@ -212,7 +204,20 @@ docker swarm leave
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd/k/tjbcMislEunjtYQNXxz5tgEDc/fSvuLHBNUX4PtfmMQ07TuUX2XJIIzLRPaqv3nsMn3+QZrV0xQd545FG1Cq83JJB98ATTW7k5Q0eaWXkvThdFeG5+n85KeVV2W4BpdHHNZ5h9RxBUmVZPpAZacdC6OUSBYTyCblPfX9DvjOk+KfwAZVwpJSkv4YduwoR3DNfXrmK5P+wrYW9z/VHUf0hcfWEnsrrHktCKgohZn9Fe8uS3B5wTNd9GgVrLGRk85ag+CChoqg80DjgFt/IhzMCArqwLyMn7rGG4Iu2Ie0TcdMc0TlRxoBhqrfKkN83cfQ3gDf41tZwp67uM9ZN feapder@qq.com
 ```
 
-或在 `.env` 文件里配置您的SSH私钥，然后在git仓库里添加您的公钥。
+或在系统设置页面配置您的SSH私钥，然后在git仓库里添加您的公钥，例如：
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/10/19/16346353514967.jpg)
+
+注意，公私钥加密方式为RSA，其他的可能会有问题
+
+生成RSA公私钥方式如下：
+```shell
+ssh-keygen -t rsa -C "备注" -f 生成路径/文件名
+```
+如：
+`ssh-keygen -t rsa -C "feaplat" -f id_rsa`
+然后一路回车，不要输密码
+![](http://markdown-media.oss-cn-beijing.aliyuncs.com/2021/11/17/16371210640228.jpg)
+最终生成 `id_rsa`、`id_rsa.pub` 文件，复制`id_rsa.pub`文件内容到git仓库，复制`id_rsa`文件内容到feaplat爬虫管理系统
 
 ## 自定义爬虫镜像
 
@@ -235,11 +240,10 @@ RUN pip3 install feapder \
 
 | 类型   | 价格  | 说明                            |
 |------|-----|-------------------------------|
-| 免费版  | 0元   | 可部署2个任务                      |
-| 绑定版  | 188元 | 同一公网IP或机器码下永久使用 |
-| 非绑定版 | 288元 | 永久使用                          |
+| 试用版  | 0元   | 可部署5个任务，删除任务不可恢复额度|
+| 正式版 | 288元 | 有效期一年，可换绑服务器|
 
-**所有版本功能一致，均可免费更新，永久使用**
+**部署后默认为试用版，购买授权码后配置到系统里即为正式版**
 
 购买方式：添加微信 `boris_tm`
 
