@@ -1,5 +1,11 @@
 version: "3.5"
 
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "1"
+  driver: json-file
+
 services:
   feapder_front:
     container_name: feapder_front
@@ -12,6 +18,7 @@ services:
       - ${FRONT_PORT}:${FRONT_PORT} # 前端端口 （自定义端口:80）
     depends_on:
       - feapder_backend
+    logging: *default-logging
 
   feapder_backend:
     container_name: feapder_backend
@@ -47,6 +54,7 @@ services:
       - mysql
       - redis
       - influxdb
+    logging: *default-logging
 
   feapder:
     container_name: feapder_worker
@@ -66,6 +74,7 @@ services:
       - "MYSQL_PASSWORD=root123"
     volumes:
       - "~/data/feapder/feapder_backend_mysql:/var/lib/mysql" # mysql 挂载， 本地目录:容器路径
+    logging: *default-logging
 
   redis:
     container_name: feapder_backend_redis
@@ -76,6 +85,7 @@ services:
 #      - ${REDIS_PORT}:6379
     volumes:
       - "~/data/feapder/feapder_backend_redis:/data" # redis 挂载， 本地目录:容器路径
+    logging: *default-logging
 
 #  # 监控
 #  grafana:
@@ -109,6 +119,7 @@ services:
     ports:
       - ${INFLUXDB_PORT_TCP}:8086
       - ${INFLUXDB_PORT_UDP}:8089/udp
+    logging: *default-logging
 
 networks:
   default:
