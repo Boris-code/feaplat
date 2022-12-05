@@ -1,7 +1,32 @@
-FROM registry.cn-hangzhou.aliyuncs.com/feapderd/feapder:[最新版本号]
+FROM registry.cn-hangzhou.aliyuncs.com/feapderd/feapder:2.4
 
-# 例如安装依赖
-RUN pip3 install feapder \
-    && pip3 install scrapy
+# 安装自定义的python版本，3.10.8
+RUN set -ex \
+    && wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz \
+    && tar -zxvf Python-3.10.8.tgz \
+    && cd Python-3.10.8 \
+    && ./configure prefix=/usr/local/python-3.10.8 \
+    && make \
+    && make install \
+    && make clean \
+    && rm -rf /Python-3.10.8* \
+    # 配置软链接
+    && ln -s /usr/local/python-3.10.8/bin/python3 /usr/bin/python3.10.8 \
+    && ln -s /usr/local/python-3.10.8/bin/pip3 /usr/bin/pip3.10.8
 
-# 自己随便搞事情，搞完修改下 `.env`文件里的 SPIDER_IMAGE 的值即可
+# 删除之前的默认python版本
+RUN set -ex \
+    && rm -rf /usr/bin/python3 \
+    && rm -rf /usr/bin/pip3 \
+    && rm -rf /usr/bin/python \
+    && rm -rf /usr/bin/pip
+
+# 设置默认为python3.10.8
+RUN set -ex \
+    && ln -s /usr/local/python-3.10.8/bin/python3 /usr/bin/python \
+    && ln -s /usr/local/python-3.10.8/bin/python3 /usr/bin/python3 \
+    && ln -s /usr/local/python-3.10.8/bin/pip3 /usr/bin/pip \
+    && ln -s /usr/local/python-3.10.8/bin/pip3 /usr/bin/pip3
+
+# 将python3.10.8加入到环境变量
+ENV PATH=$PATH:/usr/local/python-3.10.8/bin/
