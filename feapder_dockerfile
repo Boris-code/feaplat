@@ -1,13 +1,8 @@
-FROM registry.cn-hangzhou.aliyuncs.com/feapderd/feapder:2.4
-
-# 安装依赖
-RUN yum update -y && yum install -y openssl openssl-devel
+FROM registry.cn-hangzhou.aliyuncs.com/feapderd/feapder:2.5
 
 # 安装自定义的openssl版本，1.1.1
 RUN set -ex \
-    && wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz \
-    && wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256 \
-    # && sha256sum openssl-1.1.1g.tar.gz \
+    && wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz --no-check-certificate \
     && tar -zxvf openssl-1.1.1g.tar.gz \
     && cd openssl-1.1.1g \
     && ./config --prefix=/usr/local/openssl-1.1.1 --openssldir=/usr/local/openssl-1.1.1 no-ssl2 \
@@ -26,7 +21,6 @@ RUN set -ex \
     && make install \
     && make clean \
     && rm -rf /Python-3.10.8* \
-    # 配置软链接
     && ln -s /usr/local/python-3.10.8/bin/python3 /usr/bin/python3.10.8 \
     && ln -s /usr/local/python-3.10.8/bin/pip3 /usr/bin/pip3.10.8
 
