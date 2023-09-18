@@ -37,7 +37,7 @@ services:
       - SPIDER_AUTO_PULL_IMAGE=1 # 是否自动拉取镜像 否则需要在爬虫节点手动 docker pull 爬虫镜像，为了加快启动速度，可以设置0
       - SPIDER_ENV={} # 爬虫环境变量 值为json类型
       # 爬虫容器启动参数，支持的参数使用 docker service create --help 查看
-      - SPIDER_RUN_ARGS=["--network feaplat", "--log-opt max-size=20m", "--log-opt max-file=1"]
+      - SPIDER_RUN_ARGS=["--network feaplat", "--log-opt max-size=20m", "--log-opt max-file=1", "--mount type=volume,source=feaplat_worker_python3.10.8,destination=/usr/local/python-3.10.8"]
       # git ssh 私有密钥，不填则使用默认的
       - GIT_SSH_PRIVATE_KEY=${GIT_SSH_PRIVATE_KEY}
       # 监控配置
