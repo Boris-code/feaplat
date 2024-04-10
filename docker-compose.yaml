@@ -126,3 +126,6 @@ networks:
     name: feaplat
     driver: overlay
     attachable: true
+    ipam:
+      config:
+        - subnet: 10.0.0.0/8
