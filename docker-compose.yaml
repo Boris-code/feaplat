@@ -28,6 +28,7 @@ services:
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT} # 后端端口 （自定义端口:8000）
     environment:
+      - VERIFY_HOST=https://plat.feapder.com
       - FEAPDER_BACKEND_URL=http://${BACKEND_HOST}:${BACKEND_PORT}
       - AUTHORIZATION_CODE=${AUTHORIZATION_CODE} # 授权码
       - DB_URL=mysql+pymysql://root:root123@mysql:3306/feapder_platform?charset=utf8mb4 # 后端数据库配置
